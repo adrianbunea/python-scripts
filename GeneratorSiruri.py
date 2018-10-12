@@ -16,12 +16,13 @@ while lungime_sir < 60:
     for i in range(0, lungime_sir):
         caracter = sir[i]
         if caracter in neterminale:
-            lista_filtrata = []
+            lista_optiuni = []
             for regula in reguli_productie:
                 if caracter in regula[0]:
-                    substitutie = regula[1]
-                    lista_filtrata.append(substitutie)
-                    index = randrange(0,len(lista_filtrata))
-                    sir = sir.replace(sir[i],lista_filtrata[index])
+                    regula_posibila = regula[1]
+                    lista_optiuni.append(regula_posibila)
+                    index = randrange(0,len(lista_optiuni))
+            sir = sir.replace(sir[i],lista_optiuni[index])
 
 print(sir)
+print(len(sir))
