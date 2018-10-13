@@ -24,5 +24,5 @@ while lungime_sir < 60:
                     index = randrange(0,len(lista_optiuni))
             sir = sir.replace(sir[i],lista_optiuni[index])
 
-print(sir)
-print(len(sir))
+print("Sir: " + str(sir))
+print("Sirul are " + str(len(sir)) + " caractere.")
