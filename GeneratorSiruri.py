@@ -28,8 +28,8 @@ while lungime_sir < 60:
                     # atunci e marcata drept candidat si adaugata in lista de optiuni
                     regula_posibila = regula[1]
                     lista_optiuni.append(regula_posibila)
-                # se alege aleatoriu una dintre regulile posibile
-                index = randrange(0,len(lista_optiuni))
+            # se alege aleatoriu una dintre regulile posibile
+            index = randrange(0,len(lista_optiuni))
             # se inlocuieste caracterul neterminal cu grupul de caractere din partea dreapta a regulii
             sir = sir.replace(sir[i],lista_optiuni[index])
             # se incrementeaza lungimea sirului cu lungimea caracterelor adaugate 
