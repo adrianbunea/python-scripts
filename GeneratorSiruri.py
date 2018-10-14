@@ -1,6 +1,40 @@
 import string
 from random import randrange
 
+# Genereaza o lista de substitutii posibile pentru caracterul dat
+def genereaza_lista_substitutii(caracter):
+    lista_optiuni = []
+    for regula in reguli_productie:
+        if caracter in regula[0]:
+            regula_posibila = regula[1]
+            lista_optiuni.append(regula_posibila)
+    return lista_optiuni
+
+# Substituie caracterul neterminal. Incearca la intamplare substitutii, 
+# daca substitutia ar face sirul mai lung de 60, este scoasa optiunea din
+# lista de substitutii. Daca lista de substitutii devine goala atunci
+# nu mai incearca sa subsitue si returneaza false. 
+def substituie(caracter):
+    lista_optiuni = genereaza_lista_substitutii(caracter)
+    
+    global sir
+    while lista_optiuni != []:
+        index = randrange(0,len(lista_optiuni))
+        if len(sir) + len(lista_optiuni[index])-1 > 60:
+            lista_optiuni.remove(lista_optiuni[index])
+        else: 
+            sir = sir.replace(caracter,lista_optiuni[index],1)
+            return True
+    return False
+
+# Functia e folosita la finalul programului, in cazul in care sirul a ajuns 
+# la 60 si mai are caractere neterminale aceasta le va scoate
+def scoate_caractere_neterminale():
+    global sir
+    for caracter in sir:
+        if caracter in neterminale:
+            sir = sir.replace(caracter,'')
+
 neterminale = ['E','T','F']
 terminale = ['a','+','*','(',')']
 start = 'E'
@@ -8,42 +42,16 @@ reguli_productie = [('E','E+T'),('E','T'),('T','T*F'),('T','F'),('F','a'),('F','
 
 sir = start
 lungime_sir = len(sir)
+   
+substitutie = True
 
-while lungime_sir <= 60:  
-# Se opreste cand sirul are 60 de caractere
-    if any([caracter in sir for caracter in neterminale]):
-        # Daca exista un caracter neterminal in sir parcurge sirul  
-        for i in range(0, lungime_sir):
-            caracter = sir[i]
-            if caracter in neterminale:
-                # daca gaseste un caracter in lista de neterminale, genereaza o 
-                # lista cu optiunile cu care poate substitui caracterul
-                lista_optiuni = []
-                for regula in reguli_productie:
-                    # testeaza fiecare regula din regulile de productie
-                    if caracter in regula[0]:
-                        # daca caracterul se regaseste in partea stanga a regulii (regula[0]) 
-                        # atunci e marcata drept candidat si adaugata in lista de optiuni
-                        regula_posibila = regula[1]
-                        lista_optiuni.append(regula_posibila)
-                # se alege aleatoriu una dintre regulile posibile
-                index = randrange(0,len(lista_optiuni))
-                # daca dupa ce adauga noile caractere sirul devine mai lung de 60 iese din loop
-                if lungime_sir + len(lista_optiuni[index])-1 > 60:
-                    for j in range(0, lungime_sir):
-                        caracter = sir[i]
-                        if caracter in neterminale:
-                            sir = sir.replace(sir[i],'')
-                    break
-                # se inlocuieste caracterul neterminal cu grupul de caractere din partea dreapta a regulii
-                sir = sir.replace(sir[i],lista_optiuni[index])
-                # se incrementeaza lungimea sirului cu lungimea caracterelor adaugate 
-                # si se scade 1 pentru caracterul scos
-                lungime_sir += len(lista_optiuni[index])-1
+while substitutie == True:
+    substitutie = False
+    for caracter in sir:
+        if caracter in neterminale:
+           substitutie = substituie(caracter)
 
-# in cazul in care lungimea sirului devine 59 dar inca nu s-au inlocuit toate caracterele neterminale, 
-# acestea sunt inlocuite cu alte caractere terminale respectand regulile de productie
-# WIP
+# scoate_caractere_neterminale()
 
-print("Sir: " + str(sir))
+print("Sir: " + sir)
 print("Sirul are " + str(len(sir)) + " caractere.")
