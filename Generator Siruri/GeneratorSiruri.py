@@ -1,7 +1,10 @@
 import string
 from random import randrange
 
-# Genereaza o lista de substitutii posibile pentru caracterul dat
+def sterge_lambda():
+    global sir
+    sir = sir.replace('lambda', '')
+
 def genereaza_lista_substitutii(caracter):
     lista_optiuni = []
     for regula in reguli_productie:
@@ -10,14 +13,11 @@ def genereaza_lista_substitutii(caracter):
             lista_optiuni.append(regula_posibila)
     return lista_optiuni
 
-# Substituie caracterul neterminal. Incearca la intamplare substitutii, 
-# daca substitutia ar face sirul mai lung de 60, este scoasa optiunea din
-# lista de substitutii. Daca lista de substitutii devine goala atunci
-# nu mai incearca sa subsitue si returneaza false. 
 def substituie(caracter):
     lista_optiuni = genereaza_lista_substitutii(caracter)
-    
+
     global sir
+    sterge_lambda()
     while lista_optiuni != []:
         index = randrange(0,len(lista_optiuni))
         if len(sir) + len(lista_optiuni[index])-1 > 60:
@@ -29,24 +29,24 @@ def substituie(caracter):
 
 def citeste_fisier(nume_fisier):
     gramatica = open(nume_fisier, 'r')
-    gramatica = gramatica.read()
+    gramatica = gramatica.read().replace("\n", '')
 
     global neterminale
-    neterminale = gramatica[gramatica.find("\nneterminale = ")+15 : gramatica.find("\nterminale")]
+    neterminale = gramatica[gramatica.find("neterminale = ")+14 : gramatica.find("terminale", gramatica.find("neterminale = ")+14)]
     neterminale = neterminale[neterminale.find('[\'')+2: neterminale.find('\']')]
     neterminale = neterminale.split('\',\'')
 
     global terminale
-    terminale = gramatica[gramatica.find("\nterminale = ")+13 : gramatica.find("\nstart")]
+    terminale = gramatica[gramatica.find("terminale = ", gramatica.find("neterminale = ")+14)+12 : gramatica.find("start")]
     terminale = terminale[terminale.find('[\'')+2: terminale.find('\']')]
     terminale = terminale.split('\',\'')
 
     global start
-    start = gramatica[gramatica.find("\nstart = ")+9 : gramatica.find("\nreguli_productie")]
+    start = gramatica[gramatica.find("start = ")+8 : gramatica.find("reguli_productie")]
     start = start.strip('\'')
 
     global reguli_productie
-    reguli_productie = gramatica[gramatica.find("\nreguli_productie = ")+20 :]
+    reguli_productie = gramatica[gramatica.find("reguli_productie = ")+19 :]
     reguli_productie = reguli_productie[reguli_productie.find('[(')+1: reguli_productie.find(')]')]
     reguli_productie_temp = reguli_productie.split('),(')
     reguli_productie = []
@@ -74,6 +74,8 @@ while substitutie == True:
     for caracter in sir:
         if caracter in neterminale:
            substitutie = substituie(caracter)
+
+sterge_lambda()
 
 print("Sir: " + sir)
 print("Sirul are " + str(len(sir)) + " caractere.")
