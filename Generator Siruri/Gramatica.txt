@@ -1,0 +1,4 @@
+neterminale = ['E','T','F']
+terminale = ['a','+','*','(',')']
+start = 'E'
+reguli_productie = [('E' 'E+T'),('E' 'T'),('T' 'T*F'),('T' 'F'),('F' 'a'),('F' '(E)')]
