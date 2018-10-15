@@ -3,7 +3,7 @@ from random import randrange
 
 def sterge_lambda():
     global sir
-    sir = sir.replace('lambda', '')
+    sir = sir.replace('_', '')
 
 def genereaza_lista_substitutii(caracter):
     lista_optiuni = []
@@ -62,7 +62,7 @@ neterminale = ""
 terminale = ""
 start = ''
 reguli_productie = ""
-citeste_fisier("Gramatica.txt")
+citeste_fisier("Gramatica2.txt")
 
 sir = start
 lungime_sir = len(sir)

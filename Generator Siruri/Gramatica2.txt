@@ -1,4 +1,4 @@
 ﻿neterminale = ['E','T','F']
 terminale = ['a','+','*','(',')']
 start = 'E'
-reguli_productie = [('E' 'TE'),('E' '+TE'),('E' 'lambda'),('T' 'FT'),('T' '*FT'),('T' 'lambda'),('F' 'a'),('F' '(E)')]
+reguli_productie = [('E' 'TE'),('E' '+TE'),('E' '_'),('T' 'FT'),('T' '*FT'),('T' '_'),('F' 'a'),('F' '(E)')]
