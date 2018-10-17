@@ -1,4 +1,15 @@
-﻿neterminale = ['E','T','F']
-terminale = ['a','+','*','(',')']
-start = 'E'
-reguli_productie = [('E' 'TE'),('E' '+TE'),('E' '_'),('T' 'FT'),('T' '*FT'),('T' '_'),('F' 'a'),('F' '(E)')]
+﻿NETERMINALE:
+S A B
+
+TERMINALE:
+a b c
+
+START:
+S
+
+REGULI_PRODUCTIE:
+S -> abc | aAbc ;
+Ab -> bA ;
+Ac -> Bbcc ;
+bB -> Bb ;
+aB -> aaA | aa

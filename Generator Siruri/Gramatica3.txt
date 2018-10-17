@@ -1,0 +1,15 @@
+NETERMINALE:
+E G T H F
+
+TERMINALE:
+a + * ( )
+
+START:
+E
+
+REGULI_PRODUCTIE:
+E -> TG ;
+G -> +TG | _ ;
+T -> FH ;
+H -> *FH | _ ;
+F -> a | (E) 
