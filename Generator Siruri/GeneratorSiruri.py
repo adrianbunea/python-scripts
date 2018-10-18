@@ -1,5 +1,10 @@
 import string
+import argparse
 from random import randrange
+
+parser = argparse.ArgumentParser()
+parser.add_argument("nume_fisier", help = "alege un fisier text din care sa fie citita gramatica utilizata")
+args = parser.parse_args()
 
 stanga, dreapta = 0, 1
 
@@ -61,7 +66,7 @@ def citeste_fisier(nume_fisier):
     return gramatica
 
 # START
-gramatica = citeste_fisier("Gramatica2.txt")
+gramatica = citeste_fisier(args.nume_fisier)
 neterminale = gramatica["neterminale"]
 terminale = gramatica["terminale"]
 start = gramatica["start"]
@@ -75,16 +80,12 @@ substitutie = True
 while substitutie == True:
     index = len(sir)
     substitutie = False
-    # for caracter in sir:
-    #     if caracter in neterminale:
-    #        substitutie = substituie(caracter)
     for regula in reguli_productie:
         if sir.find(regula[stanga]) >= 0 and sir.find(regula[stanga]) < index:
             index = sir.find(regula[stanga])
             caractere = regula[stanga]
     if index < len(sir):
         substitutie = substituie(caractere)
-
 
 sir = sterge_lambda(sir)
 
