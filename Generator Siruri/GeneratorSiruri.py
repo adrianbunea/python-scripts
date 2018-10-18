@@ -7,6 +7,7 @@ parser.add_argument("nume_fisier", help = "alege un fisier text din care sa fie 
 args = parser.parse_args()
 
 stanga, dreapta = 0, 1
+sir = ""
 
 def sterge_lambda(sir):
     sir = sir.replace('_', '')
