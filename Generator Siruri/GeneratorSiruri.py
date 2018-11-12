@@ -1,4 +1,4 @@
-from Functii import *
+from Functii import stanga, dreapta, citeste_fisier, sterge_lambda
 
 import string
 import argparse
