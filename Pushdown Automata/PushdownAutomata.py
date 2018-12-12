@@ -5,10 +5,12 @@ import csv
 def actiune(indice, termen):
     global sir, stiva, tabel
     valoare = list(tabel[int(indice)][termen])
+    stare = ''.join(valoare[1:])
+
     if(valoare[0] == 'd'):
-        deplasare(''.join(valoare[1:]))
+        deplasare(stare)
     elif(valoare[0] == 'r'):
-        reducere(''.join(valoare[1:]))
+        reducere(stare)
     elif(valoare == list('ac')):
         return True
     else:
@@ -22,8 +24,22 @@ def deplasare(stare):
     sir.remove(sir[0])
 
 def reducere(numar_productie):
-    global reguli_productie
+    global reguli_productie, contor, contor_t
     regula = reguli_productie[int(numar_productie)-1]
+
+    if regula[dreapta] in terminale:
+        stiva_atribute.append(regula[dreapta]+str(contor))
+        # stiva_atribute.append(contor)
+        contor = contor + 1
+
+    if len(regula[dreapta]) > 1:
+        valoare2 = stiva_atribute.pop()
+        valoare1 = stiva_atribute.pop()
+        print('t' + str(contor_t) + ' = ' + valoare1 + regula[dreapta][1] + valoare2)
+        # termen = valoare1 + regula[dreapta][1] + valoare2
+        stiva_atribute.append('t' + str(contor_t))
+        contor_t = contor_t + 1
+
     while stiva[-1] != regula[dreapta][0]:
         stiva.pop()
     stiva.pop()
@@ -60,6 +76,9 @@ for linie in tabel:
     print(linie.values())
 
 stiva = ['$','0']
+stiva_atribute = []
+contor = 1;
+contor_t = 1;
 sir_intrare = args.sir_intrare + '$'   
 sir = transforma_in_lista(sir_intrare, neterminale+terminale)
 print(sir)
@@ -71,10 +90,9 @@ while acceptat is False:
         indice = termen
         termen = sir[0]
         acceptat = actiune(indice, termen)
-        print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
     else:
         indice = stiva[-2]
         termen = stiva[-1]
         salt(indice,termen)
-        print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
+    print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
 print("SIR ACCEPTAT!")
