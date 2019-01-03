@@ -1,4 +1,4 @@
-from Functii import citeste_tabel, stanga, dreapta, citeste_fisier, transforma_in_lista
+from Functii import citeste_tabel, stanga, dreapta, transforma_in_lista
 import argparse
 import csv
 
@@ -94,5 +94,5 @@ while acceptat is False:
         indice = stiva[-2]
         termen = stiva[-1]
         salt(indice,termen)
-    print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
+    # print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
 print("SIR ACCEPTAT!")
