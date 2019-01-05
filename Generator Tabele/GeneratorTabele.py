@@ -9,53 +9,55 @@ parser.add_argument("nume_fisier", help="alege un fisier text din care sa fie ci
 args = parser.parse_args()
 
 
-def genereaza_substitutie(caractere):
-	substitutie_posibila = ()
+def genereaza_substitutie(sir):
 	for regula in reguli_productie:
-		if caractere in regula[stanga]:
+		if sir in regula[stanga]:
 			substitutie_posibila = regula
 			return substitutie_posibila
-		return None
+	return None
 
 
-
-def INC(regula_productie):
-	global neterminale
+def INC(INC):
 	global reguli_productie
-	reguli_productie_copie = reguli_productie
+	copie_reguli_productie = reguli_productie[:]
 
-	index_regula = reguli_productie.index(regula_productie)
-	del(reguli_productie[index_regula])
-
-	INC = [] # lista de reguli de productie, incepe cu prima
-	regula_productie = (regula_productie[stanga], "." + regula_productie[dreapta])
-	INC.append(regula_productie)
-	print(INC[0])
-	# while any(terminal in regula_productie[dreapta] for terminal in neterminale):
+	# indice_regula = reguli_productie.index(INC[0])
+	# del reguli_productie[indice_regula]
 
 	for regula_productie in INC:
-		for sir in reguli_productie[stanga]:  # verifica fiecare caracter de dupa punct daca este in INC
-			index = regula_productie[dreapta].index('.') # obtine indexul punctului in regula de productie curenta
-			ceva = regula_productie[dreapta]
-			if regula_productie[dreapta].find(sir, index):
-				# TREBUIE SA SCHIMB SI REGULA_PRODUCTIE DE STANGA
-				substitutie = genereaza_substitutie(sir)
-				if substitutie is not None:
-					index_regula = reguli_productie.index(substitutie)
-					del reguli_productie[index_regula]
+		for regula in reguli_productie:
+			sir = regula[stanga]
+			dupa_punct = regula_productie[dreapta].split('.')[1]
+			if dupa_punct != '':
+				if dupa_punct[0].find(sir) != -1:
+					substitutie = genereaza_substitutie(sir)
+					indice_regula = reguli_productie.index(substitutie)
+					del reguli_productie[indice_regula]
+					substitutie = (substitutie[stanga], '.' + substitutie[dreapta])
+					INC.append(substitutie)
+					break
+		if reguli_productie == []:
+			break
 
-					regula_productie = (regula_productie[stanga].replace(regula_productie[stanga], substitutie[stanga]), regula_productie[dreapta].replace(sir, substitutie[dreapta], 1))
-					INC.append(regula_productie)
-					print(regula_productie)
+	reguli_productie = copie_reguli_productie[:]
+	return INC
 
-	reguli_productie = reguli_productie_copie
-	return regula_productie
 
 def URM():
 	return
 
-def SALT():
-	return
+def SALT(I_n, caracter):
+	I = []
+	for regula in I_n:
+		inainte_de_punct = regula[dreapta].split('.')[0]
+		dupa_punct = regula[dreapta].split('.')[1]
+		if dupa_punct == '':
+			# I += INC([regula])
+			ceva = 0
+		elif dupa_punct[0] == caracter:
+			regula_noua = (regula[stanga], inainte_de_punct + dupa_punct[0] + '.' + dupa_punct[1:])
+			I += INC([regula_noua])
+	return I
 
 # START
 gramatica = citeste_fisier(args.nume_fisier)
@@ -63,10 +65,37 @@ neterminale = gramatica["neterminale"]
 terminale = gramatica["terminale"]
 start = gramatica["start"]
 reguli_productie = gramatica["reguli_productie"]
+reguli_productie.append(('S', start))
 
 # for regula_productie in reguli_productie:
 # 	INC(regula_productie)
-INC(reguli_productie[0])
+# INC(reguli_productie[0])
+
+reguli_cu_punct = []
+for regula in reguli_productie:
+	regula_cu_punct = (regula[stanga], '.' + regula[dreapta])
+	reguli_cu_punct.append(regula_cu_punct)
+
+C = []
+I0 = INC([reguli_cu_punct[-1]])
+C.append(I0)
+
+for I_n in C:
+	for caracter in neterminale + terminale:
+		I = SALT(I_n, caracter)
+		if I != []:
+			if I not in C:
+				C.append(I)
+
+i = 0
+for INC in C:
+	print("I" + str(i))
+	i += 1
+	for regula in INC:
+		print(regula)
+
+
+
 
 
 
