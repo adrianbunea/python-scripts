@@ -72,7 +72,7 @@ neterminale = gramatica["neterminale"]
 terminale = gramatica["terminale"]
 start = gramatica["start"]
 reguli_productie = gramatica["reguli_productie"]
-reguli_productie = reguli_productie + [('S', start)]
+reguli_productie = reguli_productie + [('S', start+'$')]
 
 reguli_cu_punct = []
 for regula in reguli_productie:
@@ -105,20 +105,19 @@ for I_n in C:
 		else:
 			print('NU...')
 
-copie_reguli_productie =  reguli_productie[:]
-reguli_productie[0] = (reguli_productie[0][stanga]+'$',reguli_productie[0][dreapta])
 URM = dict.fromkeys(neterminale, [])
 for caracter in neterminale:
 	URM[caracter] = urm(caracter)
-reguli_productie = copie_reguli_productie[:]
 
 latime = len(terminale+neterminale)+1 # (+1 fiindca adaug si $)
 inaltime = len(C)
-# Tabel = [[0 for x in range(latime)] for y in range(inaltime)]
 Tabel = []
-for i in range (0,latime+1):
-	Tabel.append(dict.fromkeys(terminale + ['$'] + neterminale))
-# reguli_productie.append(('S',start))
+keys = terminale[:]
+keys.append('$')
+for chestie in neterminale:
+	keys.append(chestie)
+for i in range (0,inaltime):
+	Tabel.append(dict.fromkeys(keys))
 reguli_productie = [('S',start)] + reguli_productie
 
 for i in range (0, inaltime):
@@ -128,8 +127,9 @@ for i in range (0, inaltime):
 			del I[I.index(regula)]
 			parte_dreapta = regula[dreapta].split('.',1)[1]
 
-			if parte_dreapta =='':
-				if regula[dreapta].replace('.','') == start:
+			parte_dreapta = parte_dreapta.replace('$','')
+			if parte_dreapta == '':
+				if regula[dreapta].replace('.','').replace('$','') == start:
 					Tabel[i]['$'] = 'acc'
 				else:
 					urm = URM[regula[stanga]]
@@ -172,9 +172,8 @@ for i in range (0, inaltime):
 # 			print(str(F[i][caracter]).center(width), end='')
 # 	print()
 
-
-
-
-
-
-
+with open("Tabel.csv", 'w', encoding='utf-8-sig') as tabel:
+	csv_writer = csv.DictWriter(tabel, fieldnames=dict.fromkeys(terminale + ['$'] + neterminale), delimiter=',', lineterminator='\n')
+	csv_writer.writeheader()
+	for line in Tabel:
+		csv_writer.writerow(line)

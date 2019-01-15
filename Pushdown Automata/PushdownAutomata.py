@@ -1,4 +1,4 @@
-from Functii import citeste_tabel, stanga, dreapta, transforma_in_lista
+from Functii import citeste_tabel, citeste_fisier, stanga, dreapta, transforma_in_lista
 import argparse
 import csv
 
@@ -11,7 +11,7 @@ def actiune(indice, termen):
         deplasare(stare)
     elif(valoare[0] == 'r'):
         reducere(stare)
-    elif(valoare == list('ac')):
+    elif(valoare == list('acc')):
         return True
     else:
         print("Actiune nerecunoscuta!")
@@ -51,34 +51,36 @@ def salt(indice, termen):
     stiva.append(valoare)
 
 parser = argparse.ArgumentParser()
-# parser.add_argument("nume_gramatica", help = "alege un fisier text din care sa fie citita gramatica")
+parser.add_argument("nume_gramatica", help = "alege un fisier text din care sa fie citita gramatica")
 parser.add_argument("nume_tabel", help = "alege un fisier text din care sa fie citit tabelul")
 parser.add_argument("sir_intrare", help = "introdu un sir de intrare")
 args = parser.parse_args()
 
-# gramatica = citeste_fisier(args.nume_gramatica)
-neterminale = ['E','T','F']
-terminale = ['a','+','-','*','/','(',')']
-reguli_productie = [('E','E+T'),
-                    ('E','T'),
-                    ('T','T*F'),
-                    ('T','F'),
-                    ('F','(E)'),
-                    ('F','a'),
-                    ('F','-(E)')]
+gramatica = citeste_fisier(args.nume_gramatica)
+neterminale = gramatica["neterminale"]
+terminale = gramatica["terminale"]
+start = gramatica["start"]
+reguli_productie = gramatica["reguli_productie"]
+#                    [('E','E+T'),
+#                     ('E','T'),
+#                     ('T','T*F'),
+#                     ('T','F'),
+#                     ('F','(E)'),
+#                     ('F','a'),
+#                     ('F','-(E)')]
 
 tabel = citeste_tabel(args.nume_tabel)
-print(tabel[0].keys())
-for linie in tabel:
-    for key in linie:
-        if linie.get(key) == '':
-            linie[key] = '--'
-    print(linie.values())
+# print(tabel[0].keys())
+# for linie in tabel:
+#     for key in linie:
+#         if linie.get(key) == '':
+#             linie[key] = '--'
+#     print(linie.values())
 
 stiva = ['$','0']
 stiva_atribute = []
-contor = 1;
-contor_t = 1;
+contor = 1
+contor_t = 1
 sir_intrare = args.sir_intrare + '$'   
 sir = transforma_in_lista(sir_intrare, neterminale+terminale)
 print(sir)
@@ -94,5 +96,5 @@ while acceptat is False:
         indice = stiva[-2]
         termen = stiva[-1]
         salt(indice,termen)
-    # print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
+    print("STIVA: \"" + ''.join(stiva) + "\" | SIR: \"" + ''.join(sir) + "\"")
 print("SIR ACCEPTAT!")
